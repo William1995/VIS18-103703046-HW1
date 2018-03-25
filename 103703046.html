@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>[VIS18]HW1_103703046_張維庭</title>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+        <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+    </head>
+    <body>
+        <h2>近十年來台旅遊人數趨勢(2008~2017)</h2>
+        <h4>Information Visualization HW1 (103703046 資科四 張維庭)</h4>
+        <h3>動機：</h3>
+        <p>近期經常看到許多關於台灣觀光產業的負面消息，根據許多報章媒體的闡述，
+           台灣觀光業宛如寒冬，非常不景氣，而大部分的人都將原因歸咎於觀光人數的不足，
+           特別是外國觀光人數。因此，希望透過視覺化的方式來研究台灣外國觀光人數的趨勢為何。</p>
+        <br>
+        <h3>說明：</h3>
+        <p>此圖表使用的資料是來自於觀光局的統計數據，針對近十年的來台旅遊總人數進行視覺化分析。
+           呈現方式是靜態長條圖，X軸為年份，Y軸為人數其單位以萬計算，並依照顏色深到淺表示人數的多寡。</p>
+        <br>
+        <h3>結果：</h3>
+        <p>可以看到來台人數是不段遞增的，只是近年來趨緩的現象，以下為視覺化結果：</p>
+        <br><br>
+         
+        <script type="text/javascript">
+            
+            //SVG setting
+            
+            var svg_width = 960;
+            var svg_height = 500;
+            var bar_padding = 30; //距離邊界距離 
+            var bar_mergin = 10;
+            
+            //inputdata
+            var dataset = [ 384.5187, 439.5004, 556.7277, 608.7484, 731.1470, 801.6280,                         991.0204, 1043.9785, 1069.0279, 1073.9601];
+            
+            //比例尺
+            var xScale = d3.scale.linear()
+	                       .domain([0, dataset.length])
+                           .range([bar_padding+15, svg_width-bar_padding]);
+           
+            var yScale = d3.scale.linear()
+	                       .domain([0, 1100])
+	                       .range([0, svg_height-bar_padding]);
+            
+            var bar_width = (svg_width-bar_padding*2) / dataset.length - bar_mergin
+            
+            
+            //svg
+            var svg = d3.select("body")
+                      .append("svg")
+                      .attr("width", svg_width+100)
+                      .attr("height", svg_height+100);
+            
+            //bar
+            svg.selectAll("rect")
+                .data(dataset)
+                .enter()
+                .append("rect")
+                .attr("x", function(d,i) {
+                     return xScale(i)+50;;
+                 })
+                .attr("y", function(d) {
+                     return svg_height - yScale(d);
+                 })
+                 .attr("width", bar_width)
+                 .attr("height", function(d){
+                     return yScale(d);
+                 })
+                 .attr("fill", function(d){
+                     var color = 0.2 + d/100 * 0.02;
+		             return d3.hsl(200 ,color, color);
+                 })
+              
+             //bar text
+             svg.selectAll("text")
+                 .data(dataset)
+                 .enter()
+                 .append("text")
+                 .text(function(d){
+                     return d;  
+                 })
+                 .attr("x", function(d, i){
+                     return xScale(i) + 53;
+                 })
+                 .attr("y", function(d){
+                     return svg_height - yScale(d) -5;  
+                 })
+            
+             //x軸
+             svg.append("text")
+                .text("2008")
+                .attr("x",110)
+                .attr("y", 530)
+                .style({'font-size':'20px'})
+             svg.append("text")
+                .text("2009")
+                .attr("x",200)
+                .attr("y", 530)
+                .style({'font-size':'20px'})
+             svg.append("text")
+                .text("2010")
+                .attr("x",290)
+                .attr("y", 530)
+                .style({'font-size':'20px'})
+             svg.append("text")
+                .text("2011")
+                .attr("x",380)
+                .attr("y", 530)
+                .style({'font-size':'20px'})
+             svg.append("text")
+                .text("2012")
+                .attr("x",470)
+                .attr("y", 530)
+                .style({'font-size':'20px'})
+             svg.append("text")
+                .text("2013")
+                .attr("x",560)
+                .attr("y", 530)
+                .style({'font-size':'20px'})
+             svg.append("text")
+                .text("2014")
+                .attr("x",650)
+                .attr("y", 530)
+                .style({'font-size':'20px'})
+             svg.append("text")
+                .text("2015")
+                .attr("x",740)
+                .attr("y", 530)
+                .style({'font-size':'20px'})
+             svg.append("text")
+                .text("2016")
+                .attr("x",830)
+                .attr("y", 530)
+                .style({'font-size':'20px'})
+             svg.append("text")
+                .text("2017")
+                .attr("x",920)
+                .attr("y", 530)
+                .style({'font-size':'20px'})
+             
+            //x軸名
+             svg.append("text")
+                .text("年份")
+                .attr("x", 560)
+                .attr("y", 530)
+                .attr("dy", "1.71em")
+                .style("text-anchor", "end")
+                .attr("fill", "black")
+                .style("font-weight", "bold");
+            
+            //y軸
+            var y = d3.scale.linear()
+                .domain([0,1100])
+                .range([svg_height, 10]);
+            
+            var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left");
+            
+            svg.append("g")
+                .attr("class", "axis")
+                .attr("transform", "translate(70, " + 0 + ")")
+                .call(yAxis)
+                .attr({
+                 'stroke': '#000',
+                 'fill': 'none' })
+            
+            //y軸名
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("x", -190)
+                .attr("y", -10)
+                .attr("dy", "1.71em")
+                .style("text-anchor", "end")
+                .attr("fill", "black")
+                .style("font-weight", "bold")
+                .text("旅遊人數(單位：萬)");
+        </script>>
+        
+        <h4><a href="http://admin.taiwan.net.tw/statistics/year.aspx?no=134">資料來源：交通部觀光局－歷年來台旅客統計</a></h4><br>
+        
+    </body>
+</html>
